@@ -31,7 +31,7 @@ class ExpansionTile extends StatefulWidget {
   /// Creates a single-line [ListTile] with a trailing button that expands or collapses
   /// the tile to reveal or hide the [children]. The [initiallyExpanded] property must
   /// be non-null.
-  const ExpansionTile({
+  ExpansionTile({
     Key key,
     this.leading,
     @required this.title,
@@ -46,7 +46,7 @@ class ExpansionTile extends StatefulWidget {
   /// A widget to display before the title.
   ///
   /// Typically a [CircleAvatar] widget.
-  final Widget leading;
+  Widget leading;
 
   /// The primary content of the list item.
   ///
@@ -91,7 +91,6 @@ class _ExpansionTileState extends State<ExpansionTile> with SingleTickerProvider
   AnimationController _controller;
   Animation<double> _iconTurns;
   Animation<double> _heightFactor;
-  Animation<Color> _borderColor;
   Animation<Color> _headerColor;
   Animation<Color> _iconColor;
   Animation<Color> _backgroundColor;
@@ -104,7 +103,6 @@ class _ExpansionTileState extends State<ExpansionTile> with SingleTickerProvider
     _controller = AnimationController(duration: _kExpand, vsync: this);
     _heightFactor = _controller.drive(_easeInTween);
     _iconTurns = _controller.drive(_halfTween.chain(_easeInTween));
-    _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
     _headerColor = _controller.drive(_headerColorTween.chain(_easeInTween));
     _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
     _backgroundColor = _controller.drive(_backgroundColorTween.chain(_easeOutTween));
@@ -141,16 +139,7 @@ class _ExpansionTileState extends State<ExpansionTile> with SingleTickerProvider
   }
 
   Widget _buildChildren(BuildContext context, Widget child) {
-    final Color borderSideColor = _borderColor.value ?? Colors.transparent;
-
     return Container(
-      decoration: BoxDecoration(
-        color: _backgroundColor.value ?? Colors.transparent,
-        border: Border(
-          top: BorderSide(color: borderSideColor),
-          bottom: BorderSide(color: borderSideColor),
-        ),
-      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
